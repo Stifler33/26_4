@@ -29,12 +29,10 @@ public:
         std::string name;
         std::cout << "Enter name or fon number\n";
         std::cin >> name;
-        /*
-        if (!haveContact(name)){
-            std::cerr << "not contact\n";
-            return "error";
+        if (call && !haveContact(name)){
+            std::cout << "not contact\n";
+            return "null";
         }
-         */
         std::string callNumber;
         if (BEGIN_NAME){
             if (call){
@@ -56,21 +54,39 @@ public:
             std::cout << i.second << std::endl;
         }
     }
-
 };
 class Telephone{
 private:
     Book book = Book();
 public:
+    void setNumber(){
+        book.addNumber();
+    }
+    std::string reqNumber(){
+        return book.getNumber();
+    }
+    void getListNumber(){
+        book.coutList();
+    }
+    bool haveNumber(std::string &name){
+        return book.haveContact(name);
+    }
     void call(){
         std::string contact = book.getNumber(true);
+        if (contact == "null"){
+            return;
+        }
         std::cout << "Call " << contact << std::endl;
     }
     void sms(){
         std::string name = book.getNumber(true);
+        if (name == "null"){
+            return;
+        }
         std::string textSms;
         std::cout << "Enter to text\n";
-        std::cin >> textSms;
+        std::cin.ignore();
+        std::getline(std::cin,textSms);
         std::cout << "sending a massage :\n";
         std::cout << "'" <<textSms << "'" <<std::endl;
         std::cout << "for contact :\n";
@@ -79,18 +95,17 @@ public:
 
 };
 int main(){
-    Book book = Book();
     Telephone telephone = Telephone();
     std::string action ;
     while (action != "exit"){
         std::cout << "Enter action\n";
         std::cin >> action;
         if (action == "add"){
-            book.addNumber();
+            telephone.setNumber();
         }else if (action == "get"){
-            std::cout << book.getNumber() << std::endl;
+            std::cout << telephone.reqNumber() << std::endl;
         }else if (action == "list"){
-            book.coutList();
+            telephone.getListNumber();
         }else if (action == "call"){
             telephone.call();
         }else if (action == "sms"){
