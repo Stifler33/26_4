@@ -22,6 +22,23 @@ public:
         std::cout << "Enter number\n";
         std::string number;
         std::cin >> number;
+        if (number.length() < 12 || number.length() > 12){
+            std::cout << "error format. no complete number\n";
+            return;
+        }
+        for (int i = 0; i < number.length(); i++){
+            char sy = number[i];
+            if (i == 0 && sy != '+'){
+                std::cout << "error format number\n";
+                return;
+            }else if (i == 1 && sy != '7'){
+                std::cout << "error format number\n";
+                return;
+            }else if ((i > 1) && (sy < '0' || sy > '9')){
+                std::cout << "error format number\n";
+                return;
+            }
+        }
         name_to_number[name] = number;
         number_to_name[number] = name;
     }
