@@ -12,19 +12,19 @@ public:
 class Windows{
 private:
     Monitor monitor = Monitor();
-    //{w,h}
-    int permission[2] = {MAX_MONITOR_W - 10, MAX_MONITOR_H - 10};
-#define PER_H permission[1]
-#define PER_W permission[0]
+    //set default
+    int permission[2] = {MAX_MONITOR_W - 20, MAX_MONITOR_H - 20};
+#define WIN_PER_H permission[1]
+#define WIN_PER_W permission[0]
     int position[2] = {10, MAX_MONITOR_H - 10};
-#define POS_W position[0]
-#define POS_H position[1]
+#define WIN_POS_W position[0]
+#define WIN_POS_H position[1]
     bool setPosition(int &x,int &y){
-        if (x <= MAX_MONITOR_W && x > 0){
-            POS_W = x;
+        if (x <= MAX_MONITOR_W && x >= 0){
+            WIN_POS_W = x;
         }else return false;
-        if (y <= MAX_MONITOR_H && y > 0){
-            POS_H = y;
+        if (y <= MAX_MONITOR_H && y >= 0){
+            WIN_POS_H = y;
         }else return false;
         return true;
     }
@@ -44,18 +44,17 @@ public:
         std::cout << "Enter new size w, h\n";
         std::cin >> w >> h;
         if (w > 0 && h > 0){
-            PER_W = w;
-            PER_H = h;
+            WIN_PER_W = w;
+            WIN_PER_H = h;
         }
     }
     void display(){
-        int winH = PER_H;
-        int winW = PER_W;
-        for (int h = MAX_MONITOR_H; h >= 0; h--) {
-            if (h <= POS_H)winH--;
-            for (int w = 0; w <= MAX_MONITOR_W; w++) {
-                if (w >= POS_W)winW--;
-                if ((h <= POS_H && w >= POS_W) && (winW > 0 && winH > 0)){
+        int winH = WIN_PER_H;
+        for (int h = MAX_MONITOR_H; h > 0; h--) {
+            if (h <= WIN_POS_H && winH >= 0)winH--;
+            for (int w = 0, winW = WIN_PER_W; w < MAX_MONITOR_W; w++) {
+                if (w >= WIN_POS_W && winW >= 0)winW--;
+                if ((h <= WIN_POS_H && w >= WIN_POS_W) && (winW >= 0 && winH >= 0)){
                     std::cout << 1;
                 }else std::cout << 0;
             }
@@ -66,6 +65,19 @@ public:
 
 int main(){
     Windows windows = Windows();
-    windows.display();
+    std::string action;
+    while (action != "close"){
+        std::cout << "Enter action\n";
+        std::cin >> action;
+        if (action == "move"){
+            windows.move();
+        }else if (action == "resize"){
+            windows.resize();
+        }else if (action == "display"){
+            windows.display();
+        }else if (action == "close"){
+            std::cout << "Good by\n";
+        }
+    }
     return 0;
 }
